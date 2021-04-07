@@ -1,25 +1,37 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <BasicComponent v-for="name in usernames" :username="name" :key="name" />
+    <div class="pokemon-card">questa è  una pokemon card senza stile</div>
+    <BasicComponent v-for="name in usernames" :key="name" :username="name" />
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <PokemonSection :pokemons="pokemons" />
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import BasicComponent from './components/BasicComponent.vue'
+import BasicComponent from './components/BasicComponent'
+import PokemonSection from './components/PokemonSection.vue'
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    BasicComponent
+    BasicComponent,
+    PokemonSection
   },
   data: function() {
     return {
-      usernames: ['pippo', 'pippo', 'pluto', 'paperino', 'pina']
+      usernames: ['pippo', 'pluto', 'paperino', 'pina'],
+      pokemons: []
     }
+  },
+  mounted: function() {
+    this.$http.get(this.$baseURLApi + '/pokemon')
+      .then((result) => {
+        console.log(result.data)
+        this.pokemons = result.data.results
+    })
   }
 }
 </script>
